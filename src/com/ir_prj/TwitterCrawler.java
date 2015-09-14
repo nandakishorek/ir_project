@@ -32,8 +32,6 @@ public class TwitterCrawler {
 
     public static final int RET_COUNT = 100; // number of tweets per request
 
-    public static final String[] LANGUAGES = { "en", "de", "ru" };
-
     public static Properties paginationProperties;
 
     private enum Language {
