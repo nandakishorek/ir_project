@@ -31,7 +31,7 @@ public class TweetFormatter {
 
         File tweetsDir = new File("tweets");
         for (File tweetFile : tweetsDir.listFiles()) {
-            String fileName = "formatted" + File.separator + "formatted_" + tweetFile.getName();
+            String fileName = "formatted" + File.separator + "formatted_" + tweetFile.getName() + ".json";
             File formattedTweetFile = new File(fileName);
             formattedTweetFile.getParentFile().mkdirs();
 
@@ -62,6 +62,7 @@ public class TweetFormatter {
                         String text = status.getText();
                         text = text.replace('"', '\''); // replace double quotes by single quotes
                         text = text.replace('\n', ' '); // replace '\n' by space
+                        text = text.replace("\\", "\\\\"); // escape forward slash
                         if (fileName.contains("en")) {
                             bw.write(",\"tw_text_en\":\"");
                         } else if (fileName.contains("de")) {
@@ -82,7 +83,7 @@ public class TweetFormatter {
                             if (i != 0) {
                                 bw.write(",");
                             }
-                            bw.write("\"" + ue.getURL() + "\"");
+                            bw.write("\"" + ue.getExpandedURL() + "\"");
                             ++i;
                         }
                         bw.write("]");
@@ -98,9 +99,6 @@ public class TweetFormatter {
                             ++i;
                         }
                         bw.write("]");
-                        
-                        // user name
-                        bw.write(",\"user_name\":\"" + status.getUser().getName() + "\"");
                         
                         // user screen_name - name of the handle
                         bw.write(",\"user_screen_name\":\"" + status.getUser().getScreenName() + "\"");
