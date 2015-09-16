@@ -35,7 +35,7 @@ public class TwitterCrawler {
     public static Properties paginationProperties;
 
     private enum Language {
-        /*EN("en"),*/ RU("ru")/*, DE("de")*/;
+        EN("en"), RU("ru"), DE("de");
 
         private String lang;
 
