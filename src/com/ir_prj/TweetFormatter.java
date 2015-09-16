@@ -52,7 +52,7 @@ public class TweetFormatter {
                         Status status = TwitterObjectFactory.createStatus(tweet);
                         
                         // id
-                        bw.write("\"id\":" + status.getId());
+                        bw.write("\"id\":" + Long.toString(status.getId()));
                         
                         // lang
                         bw.write(",\"lang\":\"" + status.getLang() + "\"");
@@ -101,6 +101,9 @@ public class TweetFormatter {
                         
                         // user name
                         bw.write(",\"user_name\":\"" + status.getUser().getName() + "\"");
+                        
+                        // user screen_name - name of the handle
+                        bw.write(",\"user_screen_name\":\"" + status.getUser().getScreenName() + "\"");
                         
                         // tweet end
                         bw.write("}");
