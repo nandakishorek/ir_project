@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="twittercore1" version="1.5">
+
+	<!-- To enforce document uniqueness -->
+	<uniqueKey>id</uniqueKey>
+
+	<!-- Field declarations -->
+	<field name="_version_" type="long" indexed="true" stored="true" />
+	<field name="_root_" type="string" indexed="true" stored="false" />
+	<field name="id" type="string" indexed="true" stored="true"
+		required="true" multiValued="false" />
+        <field name="created_at" type="tdate" indexed="true" stored="true"/>
+        <field name="lang" type="string" indexed="true" stored="false" />
+        <field name="tw_text_en" type="text_en" indexed="true" stored="true"/>
+        <field name="tw_text_de" type="text_de" indexed="true" stored="true"/>
+        <field name="tw_text_ru" type="text_ru" indexed="true" stored="true"/>
+        <field name="user_name" type="string" indexed="true" stored="true" />
+        <field name="user_screen_name" type="string" indexed="true" stored="true"/>
+        <field name="urls" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="hashtags" type="string" indexed="true" stored="true" multiValued="true"/>
+        <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+
+	<!-- Field type declarations -->
+	<fieldType name="string" class="solr.StrField"
+		sortMissingLast="true" />
+	<fieldType name="tdate" class="solr.TrieDateField"
+		precisionStep="6" positionIncrementGap="0" />
+        <!-- English tweet-->
+	<fieldType name="text_en" class="solr.TextField"
+		positionIncrementGap="100">
+		<analyzer type="index">
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<!-- in this example, we will only use synonyms at query time <filter 
+				class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" 
+				expand="false"/> -->
+			<!-- Case insensitive stop word removal. -->
+			<filter class="solr.StopFilterFactory" ignoreCase="true"
+				words="lang/stopwords_en.txt" />
+			<filter class="solr.LowerCaseFilterFactory" />
+			<filter class="solr.EnglishPossessiveFilterFactory" />
+			<filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
+			<!-- Optionally you may want to use this less aggressive stemmer instead 
+				of PorterStemFilterFactory: <filter class="solr.EnglishMinimalStemFilterFactory"/> -->
+			<filter class="solr.PorterStemFilterFactory" />
+		</analyzer>
+		<analyzer type="query">
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt"
+				ignoreCase="true" expand="true" />
+			<filter class="solr.StopFilterFactory" ignoreCase="true"
+				words="lang/stopwords_en.txt" />
+			<filter class="solr.LowerCaseFilterFactory" />
+			<filter class="solr.EnglishPossessiveFilterFactory" />
+			<filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
+			<!-- Optionally you may want to use this less aggressive stemmer instead 
+				of PorterStemFilterFactory: <filter class="solr.EnglishMinimalStemFilterFactory"/> -->
+			<filter class="solr.PorterStemFilterFactory" />
+		</analyzer>
+	</fieldType>
+
+	<!-- German tweet-->
+	<fieldType name="text_de" class="solr.TextField"
+		positionIncrementGap="100">
+		<analyzer>
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<filter class="solr.LowerCaseFilterFactory" />
+			<filter class="solr.StopFilterFactory" ignoreCase="true"
+				words="lang/stopwords_de.txt" format="snowball" />
+			<filter class="solr.GermanNormalizationFilterFactory" />
+			<filter class="solr.GermanLightStemFilterFactory" />
+			<!-- less aggressive: <filter class="solr.GermanMinimalStemFilterFactory"/> -->
+			<!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" 
+				language="German2"/> -->
+		</analyzer>
+	</fieldType>
+
+	<!-- Russian tweet-->
+	<fieldType name="text_ru" class="solr.TextField"
+		positionIncrementGap="100">
+		<analyzer>
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<filter class="solr.LowerCaseFilterFactory" />
+			<filter class="solr.StopFilterFactory" ignoreCase="true"
+				words="lang/stopwords_ru.txt" format="snowball" />
+			<filter class="solr.SnowballPorterFilterFactory" language="Russian" />
+			<!-- less aggressive: <filter class="solr.RussianLightStemFilterFactory"/> -->
+		</analyzer>
+	</fieldType>
+</schema>
