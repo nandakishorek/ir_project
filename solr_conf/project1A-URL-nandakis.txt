@@ -1,0 +1,2 @@
+http://nandakishorek.koding.io:8983/solr/twittercore1
+50169797
