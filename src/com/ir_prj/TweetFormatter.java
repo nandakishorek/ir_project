@@ -64,11 +64,11 @@ public class TweetFormatter {
                         text = text.replace('\n', ' '); // replace '\n' by space
                         text = text.replace("\\", "\\\\"); // escape forward slash
                         if (fileName.contains("en")) {
-                            bw.write(",\"tw_text_en\":\"");
+                            bw.write(",\"text_en\":\"");
                         } else if (fileName.contains("de")) {
-                            bw.write(",\"tw_text_de\":\"");
+                            bw.write(",\"text_de\":\"");
                         } else {
-                            bw.write(",\"tw_text_ru\":\"");
+                            bw.write(",\"text_ru\":\"");
                         }
                         
                         bw.write(text + "\"");
@@ -77,7 +77,7 @@ public class TweetFormatter {
                         bw.write(",\"created_at\":\"" + formatDate(status.getCreatedAt()) + "\"");
                         
                         // urls
-                        bw.write(",\"urls\":[");
+                        bw.write(",\"tweet_urls\":[");
                         int i = 0;
                         for (URLEntity ue : status.getURLEntities()) {
                             if (i != 0) {
@@ -89,7 +89,7 @@ public class TweetFormatter {
                         bw.write("]");
                         
                         // hashtags
-                        bw.write(",\"hashtags\":[");
+                        bw.write(",\"tweet_hashtags\":[");
                         i = 0;
                         for (HashtagEntity he : status.getHashtagEntities()) {
                             if (i != 0) {
