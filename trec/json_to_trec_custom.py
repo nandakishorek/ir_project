@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 # change the url according to your own koding username and query
 inUrlBeg = "http://nandakishorek.koding.io:8983/solr/vsm_core/select?q="
-inUrlEnd = "&fl=id%2Cscore%2Ctext_en%2Ctext_de%2Ctext_ru&wt=json&indent=true&defType=dismax&qf=text_en+text_de+text_ru&mm=1&rows=3000"
+inUrlEnd = "&fl=id%2Cscore%2Ctext_en%2Ctext_de%2Ctext_ru&wt=json&indent=true&defType=dismax&qf=text_en+text_de+text_ru&mm=1&rows=4000"
 
 
 queryFile = open(args.query_file, "r");
