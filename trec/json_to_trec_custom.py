@@ -55,7 +55,7 @@ for line in queryFile:
     inUrl = inUrlBeg + urllib.quote(query) + inUrlEnd
     print inUrl
   
-    data = urllib2.urlopen(inUrl)
+    data = urllib2.urlopen(inUrl, timeout=30)
 
     print "ran query " + qid
     # if you are using python 3, you should use
