@@ -13,7 +13,7 @@ import json
 # import urllib.request 
 import urllib
 import urllib2
-from langdetect import detect_langs
+from langdetect import detect
 import argparse
 import base64
 
@@ -26,17 +26,20 @@ args = parser.parse_args()
 
 # change the url according to your own koding username and query
 inUrlBeg = "http://nandakishorek.koding.io:8983/solr/vsm_core/select?q="
-inUrlEnd = "&fl=id%2Cscore%2Ctext_en%2Ctext_de%2Ctext_ru&wt=json&indent=true&defType=dismax&qf=text_en+text_de+text_ru&mm=1&rows=4000"
+inUrlEnd = "&fl=id%2Cscore%2Ctext_en%2Ctext_de%2Ctext_ru&wt=json&indent=true&defType=dismax&mm=1&rows=4000"
 
 
 # init the auth handler
 auth_handler = urllib2.HTTPBasicAuthHandler()
-auth_handler.add_password(realm='Auth',
-                      uri='http://nandakishorek.koding.io:8983/',
+auth_handler.add_password(realm="Auth",
+                      uri="http://nandakishorek.koding.io:8983/",
                       user=args.user_name,
                       passwd=args.password)
 opener = urllib2.build_opener(auth_handler)
 urllib2.install_opener(opener)
+
+
+supported_langs = ["en", "de", "ru"]
 
 queryFile = open(args.query_file, "r");
 for line in queryFile:
@@ -45,14 +48,23 @@ for line in queryFile:
     qid = line[0:indexOfSpace]
     query = line[indexOfSpace+1:-1]
 
-    langs = detect_langs(query.decode("UTF-8"))
+    # try to detect the query language
+    langs = detect(query.decode("UTF-8"))
+    
+    # if the lang is not in {en, de, ru}, then assume it is en
+    # otherwise boost the field for the language
+    boost = [1] * len(supported_langs)
+    for i in range(0, len(boost)):
+        if langs == supported_langs[i]:
+            boost[i] = 1000
+    print boost
+    qf="&qf=text_en^" + str(boost[0]) + "+text_de^" + str(boost[1]) + "+text_ru^" + str(boost[2])
 
-    print langs
- 
+    
     outfn = "trec_op_" + str(qid)
     outf = open(outfn, "w")
 
-    inUrl = inUrlBeg + urllib.quote(query) + inUrlEnd
+    inUrl = inUrlBeg + urllib.quote(query) + inUrlEnd + qf
     print inUrl
   
     data = urllib2.urlopen(inUrl, timeout=30)
