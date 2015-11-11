@@ -19,15 +19,17 @@ import base64
 
 parser = argparse.ArgumentParser(description="Converts Solr search result from json to trec eval format.")
 parser.add_argument("query_file", help="absolute path to the query file", type=str)
-parser.add_argument("model_name", help="name of the model", type=str)
-parser.add_argument("user_name", help="solr username", type=str)
-parser.add_argument("password", help="solr password", type=str)
+parser.add_argument("model_name", help="name of the model, which is also the name of the core", type=str)
+#parser.add_argument("user_name", help="solr username", type=str)
+#parser.add_argument("password", help="solr password", type=str)
 args = parser.parse_args()
 
 # change the url according to your own koding username and query
-inUrlBeg = "http://nandakishorek.koding.io:8983/solr/vsm_core/select?q="
+inUrlBeg = "http://localhost:8983/solr/"+ args.model_name + "/select?q="
 inUrlEnd = "&fl=id%2Cscore%2Ctext_en%2Ctext_de%2Ctext_ru&wt=json&indent=true&defType=dismax&mm=1&rows=4000"
 
+"""
+commented out the auth part
 
 # init the auth handler
 auth_handler = urllib2.HTTPBasicAuthHandler()
@@ -37,7 +39,7 @@ auth_handler.add_password(realm="Auth",
                       passwd=args.password)
 opener = urllib2.build_opener(auth_handler)
 urllib2.install_opener(opener)
-
+"""
 
 supported_langs = ["en", "de", "ru"]
 
