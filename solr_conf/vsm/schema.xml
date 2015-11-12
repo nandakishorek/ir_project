@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<schema name="twittercore1" version="1.5">
+<schema name="vsm" version="1.5">
 
  <!-- To enforce document uniqueness -->
  <uniqueKey>id</uniqueKey>
