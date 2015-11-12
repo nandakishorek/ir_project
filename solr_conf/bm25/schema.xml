@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<schema name="twittercore1" version="1.5">
+<schema name="bm25" version="1.5">
 
  <!-- To enforce document uniqueness -->
  <uniqueKey>id</uniqueKey>
@@ -98,4 +98,10 @@
    <filter class="solr.LowerCaseFilterFactory" />
   </analyzer>
  </fieldType> -->
+
+ <similarity class="solr.BM25SimilarityFactory"> 
+   <float name="k1">1.0</float>
+   <float name="b">0.5</float>
+ </similarity>
+
 </schema>
