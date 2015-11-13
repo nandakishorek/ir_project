@@ -100,7 +100,7 @@
  </fieldType> -->
 
  <similarity class="org.apache.solr.search.similarities.BM25SimilarityFactory"> 
-   <float name="k1">1.0</float>
+   <float name="k1">1.2</float>
    <float name="b">0.5</float>
  </similarity>
 
