@@ -8,6 +8,7 @@ Created on Tue Oct 27 17:47:48 2015
 2. added query language detection
 3. added basic auth
 """
+import time
 import json
 # if you are using python 3, you should 
 # import urllib.request 
@@ -44,6 +45,9 @@ urllib2.install_opener(opener)
 supported_langs = ["en", "de", "ru"]
 
 queryFile = open(args.query_file, "r");
+outfn = "trec_op_" + str(int(time.time()))
+outf = open(outfn, "w")
+
 for line in queryFile:
     
     indexOfSpace = line.index(" ")
@@ -51,20 +55,17 @@ for line in queryFile:
     query = line[indexOfSpace+1:-1]
 
     # try to detect the query language
-    langs = detect(query.decode("UTF-8"))
+    #langs = detect(query.decode("UTF-8"))
     
     # if the lang is not in {en, de, ru}, then assume it is en
     # otherwise boost the field for the language
-    boost = [1] * len(supported_langs)
-    for i in range(0, len(boost)):
-        if langs == supported_langs[i]:
-            boost[i] = 1000
-    print boost
-    qf="&qf=text_en^" + str(boost[0]) + "+text_de^" + str(boost[1]) + "+text_ru^" + str(boost[2])
-
-    
-    outfn = "trec_op_" + str(qid)
-    outf = open(outfn, "w")
+    #boost = [1] * len(supported_langs)
+    #for i in range(0, len(boost)):
+    #    if langs == supported_langs[i]:
+    #        boost[i] = 2
+    #print boost
+    #qf="&qf=text_en^" + str(boost[0]) + "+text_de^" + str(boost[1]) + "+text_ru^" + str(boost[2])
+    qf="&qf=text_en+text_de+text_ru"
 
     inUrl = inUrlBeg + urllib.quote(query) + inUrlEnd + qf
     print inUrl
@@ -81,4 +82,4 @@ for line in queryFile:
     for doc in docs:
         outf.write(qid + " " + "Q0" + " " + str(doc["id"]) + " " + str(rank) + " " + str(doc["score"]) + " " + args.model_name + "\n")
         rank += 1
-    outf.close()
+outf.close()
