@@ -70,8 +70,9 @@ for line in queryFile:
     #        boost[i] = 2
     #print boost
     #qf="&qf=text_en^" + str(boost[0]) + "+text_de^" + str(boost[1]) + "+text_ru^" + str(boost[2]) + "&pf=text_en^" + str(boost[0]) + "+text_ru" + str(boost[1]) + "+text_de^" + str(boost[2]) + "&ps=3"
-    qf="&qf=text_en+text_de+text_ru&pf=text_en+text_ru+text_de&ps=3"
+    #qf="&qf=text_en+text_de+text_ru&pf=text_en+text_ru+text_de&ps=3"
     #qf="&qf=text_en+text_de+text_ru+text_en_igcase+text_de_igcase+text_ru_igcase"
+    qf = "&qf=text_en+text_de+text_ru+tweet_hashtags^4"
 
     inUrl = inUrlBeg + urllib.quote(query) + inUrlEnd + qf
     print inUrl
