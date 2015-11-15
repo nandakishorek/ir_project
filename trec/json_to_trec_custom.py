@@ -52,7 +52,12 @@ for line in queryFile:
     
     indexOfSpace = line.index(" ")
     qid = line[0:indexOfSpace]
-    query = line[indexOfSpace+1:-1]
+    lang = line.find(" ", line.find(" ") + 1)
+    query = line[lang+1:]
+    print query
+    lang = line[indexOfSpace+1:lang]
+    lang = lang[lang.find(":") + 1:]
+    print lang
 
     # try to detect the query language
     #langs = detect(query.decode("UTF-8"))
@@ -61,7 +66,7 @@ for line in queryFile:
     # otherwise boost the field for the language
     #boost = [1] * len(supported_langs)
     #for i in range(0, len(boost)):
-    #    if langs == supported_langs[i]:
+    #    if lang == supported_langs[i]:
     #        boost[i] = 2
     #print boost
     #qf="&qf=text_en^" + str(boost[0]) + "+text_de^" + str(boost[1]) + "+text_ru^" + str(boost[2]) + "&pf=text_en^" + str(boost[0]) + "+text_ru" + str(boost[1]) + "+text_de^" + str(boost[2]) + "&ps=3"
