@@ -45,8 +45,8 @@ urllib2.install_opener(opener)
 supported_langs = ["en", "de", "ru"]
 
 queryFile = open(args.query_file, "r");
-outfn = "trec_op_" + str(int(time.time()))
-outf = open(outfn, "w")
+#outfn = "trec_op_" + str(int(time.time()))
+#outf = open(outfn, "w")
 
 for line in queryFile:
     
@@ -61,7 +61,7 @@ for line in queryFile:
 
     # try to detect the query language
     #langs = detect(query.decode("UTF-8"))
-    
+     
     # if the lang is not in {en, de, ru}, then assume it is en
     # otherwise boost the field for the language
     #boost = [1] * len(supported_langs)
@@ -72,7 +72,8 @@ for line in queryFile:
     #qf="&qf=text_en^" + str(boost[0]) + "+text_de^" + str(boost[1]) + "+text_ru^" + str(boost[2]) + "&pf=text_en^" + str(boost[0]) + "+text_ru" + str(boost[1]) + "+text_de^" + str(boost[2]) + "&ps=3"
     #qf="&qf=text_en+text_de+text_ru&pf=text_en+text_ru+text_de&ps=3"
     #qf="&qf=text_en+text_de+text_ru+text_en_igcase+text_de_igcase+text_ru_igcase"
-    qf = "&qf=text_en+text_de+text_ru+tweet_hashtags^4"
+    #qf = "&qf=text_en+text_de+text_ru+tweet_hashtags^4"
+    qf="&qf=text_en+text_de+text_ru"
 
     inUrl = inUrlBeg + urllib.quote(query) + inUrlEnd + qf
     print inUrl
@@ -83,10 +84,12 @@ for line in queryFile:
     # if you are using python 3, you should use
     # data = urllib.request.urlopen(inurl)
 
+    outfn = str(int(qid)) + ".txt"
+    outf = open(outfn, "w")
     docs = json.load(data)["response"]["docs"]
     # the ranking should start from 1 and increase
     rank = 1
     for doc in docs:
         outf.write(qid + " " + "Q0" + " " + str(doc["id"]) + " " + str(rank) + " " + str(doc["score"]) + " " + args.model_name + "\n")
         rank += 1
-outf.close()
+    outf.close()
