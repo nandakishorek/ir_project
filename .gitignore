@@ -1,6 +1,7 @@
 /bin/
 /output/
 /tweets/
+/nyt_news/
 
 *.pydevproject
 .metadata
