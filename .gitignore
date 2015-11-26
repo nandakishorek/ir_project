@@ -43,4 +43,4 @@ local.properties
 .texlipse
 /formatted/
 
-**/credential.properties
+**/credentials.properties
