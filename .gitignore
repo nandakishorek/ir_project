@@ -42,3 +42,5 @@ local.properties
 # TeXlipse plugin
 .texlipse
 /formatted/
+
+**/credential.properties
