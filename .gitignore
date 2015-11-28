@@ -2,6 +2,7 @@
 /output/
 /tweets/
 /nyt_news/
+/formatted_nyt/
 
 *.pydevproject
 .metadata
