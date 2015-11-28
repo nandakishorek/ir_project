@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="nyt" version="1.5">
+
+   <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
+      or Solr won't start. _version_ and update log are required for SolrCloud
+   --> 
+   <field name="_version_" type="long" indexed="true" stored="true"/>
+   
+   <field name="_id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>     
+   <field name="lead_paragraph" type="string" indexed="true" stored="true" required="false"/>
+   <field name="web_url" type="string" indexed="true" stored="true"/>
+   <filed name="headline" type="string" indexex="true" stored="true" required="false"/> <!-- headline/main-->
+   <field name="pub_date" type="tdate" indexed="true" stored="true"/>
+   <field name="orgs" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="names" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="glocations" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="headline" type="string" indexed="true" stored="true" multiValued="true"/>
+
+   <!-- Field to use to determine and enforce document uniqueness. 
+      Unless this field is marked with required="false", it will be a required field
+   -->
+   <uniqueKey>_id</uniqueKey>
+
+   <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+   <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+
+   <!-- A Trie based date field for faster date range queries and date faceting. -->
+   <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
+
+   <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+     <analyzer type="index">
+       <tokenizer class="solr.StandardTokenizerFactory"/>
+       <!-- in this example, we will only use synonyms at query time
+       <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+       -->
+       <!-- Case insensitive stop word removal.
+       -->
+       <filter class="solr.StopFilterFactory"
+               ignoreCase="true"
+               words="lang/stopwords_en.txt"
+               />
+       <filter class="solr.LowerCaseFilterFactory"/>
+       <filter class="solr.EnglishPossessiveFilterFactory"/>
+       <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+                />
+        <filter class="solr.LowerCaseFilterFactory"/>
+	<filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+</schema>
