@@ -1,2 +1,13 @@
 1:paris attacks
 2:syrian refugee crisis
+3:Migrant crisis
+4:Syrian war
+5:Syrian civil war
+6:Refugee crisis
+7:Paris attacks
+8:Paris bombings
+9:ISIS
+10:Daesh
+11:Russian aircrafts downed
+12:Turkey airspace
+13:Brussels shutdown
