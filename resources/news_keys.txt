@@ -11,3 +11,5 @@
 11:Russian aircrafts downed
 12:Turkey airspace
 13:Brussels shutdown
+14:War over oil
+15:War on Terror
