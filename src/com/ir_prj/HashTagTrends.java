@@ -48,7 +48,8 @@ public class HashTagTrends {
               
         int NUM_OF_DAYS = getDateDiffInDays(corpusStartDate, corpusEndDate);
         Date start_date = (Date) corpusStartDate.clone(); // dirty, but works
-        Date end_date = (Date) corpusEndDate.clone();
+        Date end_date = (Date) corpusStartDate.clone();
+        end_date.setDate(end_date.getDate() + 1); // set end date to next day
         
         String solrURLString = getSolrURLString();
 
@@ -61,6 +62,7 @@ public class HashTagTrends {
 
             for (int i = 0; i < hashTagAndCounts.length(); i += 2) {
                 counts.put(hashTagAndCounts.getString(i), new int[NUM_OF_DAYS]);
+                
             }
 
         } catch (JSONException e) {
@@ -93,8 +95,6 @@ public class HashTagTrends {
             end_date.setDate(end_date.getDate() + 1);
         }
 
-        
-
     }
     
     private static List<String> getTrendingHashTags(Date startDate, Date endDate){
@@ -103,30 +103,39 @@ public class HashTagTrends {
         int numOfDays = getDateDiffInDays(startDate, endDate);
         int start = getDateDiffInDays(corpusStartDate, startDate); // diff b/w req start date and corpus data start date
         
-        List<IdfScore> idfScores = new ArrayList<IdfScore>();
+        List<Score> scores = new ArrayList<Score>(counts.size());
         
         Set<String> keys = counts.keySet();
         for (String key : keys) {
-            double idf = 0.0;
-            double weight = 0.1;
+            int daysAppeared = 0;
+            double score = 0.0;
+            double weight = 0.01;
             int[] dayCounts = counts.get(key);
             for (int i = start; i < numOfDays; ++i) {
-                idf += (double)dayCounts[i] * weight;
-                weight *= 2;
+                
+                if (dayCounts[i] > 0) {
+                    score += (double)dayCounts[i] * weight;
+                    weight *= 3;
+                    ++daysAppeared;
+                }
             }
             
-            if (key.equalsIgnoreCase("russland")) {
-                System.out.println(idf);
+            if (daysAppeared > 0) {
+                score *= Math.log((double)numOfDays/daysAppeared);
+            }
+            
+            if (key.equalsIgnoreCase("جبهة_النصرة")) {
+                System.out.println(score);
                 System.out.println(Arrays.toString(dayCounts));
             }
             
-            idfScores.add(new IdfScore(key, idf));
+            scores.add(new Score(key, score));
         }
         
-        Collections.sort(idfScores);
+        Collections.sort(scores);
         
         for (int i = 0; i < K; ++i) {
-            ret.add(idfScores.get(i).getHashTag());
+            ret.add(scores.get(i).getHashTag());
         }
         
         return ret;
@@ -206,40 +215,4 @@ public class HashTagTrends {
         return (int)TimeUnit.DAYS.convert(endDate.getTime() - startDate.getTime(), TimeUnit.MILLISECONDS);
     }
 
-}
-
-class IdfScore implements Comparable<IdfScore>{
-    
-    private String hashTag;
-    private double score;
-    
-    public IdfScore(String hashTag, double score) {
-        super();
-        this.hashTag = hashTag;
-        this.score = score;
-    }
-
-    @Override
-    /**
-     *  Sort in non-ascending order
-     */
-    public int compareTo(IdfScore o) {
-        // TODO: not the ideal way to compare floating point values, change it
-        if (this.score < o.score) {
-            return 1;
-        } else if (this.score >= o.score) {
-            return -1;
-        }
-        return 0;
-    }
-    
-    public String getHashTag() {
-        return hashTag;
-    }
-
-    public double getScore() {
-        return score;
-    }
-    
-    
 }
