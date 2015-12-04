@@ -120,8 +120,8 @@ public class HashTagTrends {
                 }
             }
             
-            // if numOfDays == daysAppeared, then idf does not make sense
-            if (daysAppeared > 0 && numOfDays != daysAppeared) {
+            // if numOfDays == 1, then idf does not make sense
+            if (daysAppeared > 0 && numOfDays > 1) {
                 score *= Math.log((double)numOfDays/daysAppeared);
             }
             
