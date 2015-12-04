@@ -111,7 +111,7 @@ public class HashTagTrends {
             double score = 0.0;
             double weight = 0.01;
             int[] dayCounts = counts.get(key);
-            for (int i = start; i < numOfDays; ++i) {
+            for (int i = start; i < start + numOfDays; ++i) {
                 
                 if (dayCounts[i] > 0) {
                     score += (double)dayCounts[i] * weight;
@@ -120,11 +120,12 @@ public class HashTagTrends {
                 }
             }
             
-            if (daysAppeared > 0) {
+            // if numOfDays == daysAppeared, then idf does not make sense
+            if (daysAppeared > 0 && numOfDays != daysAppeared) {
                 score *= Math.log((double)numOfDays/daysAppeared);
             }
             
-            if (key.equalsIgnoreCase("جبهة_النصرة")) {
+            if (key.equalsIgnoreCase("isis")) {
                 System.out.println(score);
                 System.out.println(Arrays.toString(dayCounts));
             }
